@@ -1,0 +1,102 @@
+<ng-template #activityActions>
+  <div class="extra-action-title-container">
+    <span class="extra-action-title">Tevékenység műveletek</span>
+  </div>
+  @if(partner?.status === PartnerStatus.ACTIVE) {
+    <button (click)="createActivity()" class="action-button" matButton="filled">
+      Tevékenység hozzáadása
+      <mat-icon iconPositionEnd>add</mat-icon>
+    </button>
+  }@else {
+    <button disabledInteractive matTooltip='"INACTIVE" Partnerhez nem lehet tevékenységet rögzíteni!' class="action-button" matButton="filled" disabled>
+      Tevékenység hozzáadása
+      <mat-icon iconPositionEnd>add</mat-icon>
+    </button>
+  }
+
+</ng-template>
+
+<mat-card class="example-card" appearance="outlined">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>{{partner?.name}}</mat-card-title>
+    <mat-card-subtitle>{{partner?.taxNumber}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+      <p>Székhely: {{partner?.headquarters}}</p>
+      <p>Státusz: {{partner?.status}}</p>
+      <p>Minősítések: {{partner?.qualifications}}</p>
+  </mat-card-content>
+</mat-card>
+
+
+<h3>Partnerhez tartozó tevékenységek</h3>
+<mat-form-field>
+  <mat-label>Szűrés</mat-label>
+  <input matInput (keyup)="applyFilter($event)" #input>
+</mat-form-field>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> Id </th>
+    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="subject">
+    <th mat-header-cell *matHeaderCellDef> Tárgy </th>
+    <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="type">
+    <th mat-header-cell *matHeaderCellDef> Típus </th>
+    <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef> Leírás </th>
+    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="durationMinutes">
+    <th mat-header-cell *matHeaderCellDef> Időtartam(perc) </th>
+    <td mat-cell *matCellDef="let element"> {{element.durationMinutes}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="responsibleName">
+    <th mat-header-cell *matHeaderCellDef> Felelős neve </th>
+    <td mat-cell *matCellDef="let element"> {{element.responsibleName}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="partnerId">
+    <th mat-header-cell *matHeaderCellDef> Partner id </th>
+    <td mat-cell *matCellDef="let element"> {{element.partnerId}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="partnerName">
+    <th mat-header-cell *matHeaderCellDef> Partner neve </th>
+    <td mat-cell *matCellDef="let element"> {{element.partnerName}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Múveletek</th>
+    <td mat-cell *matCellDef="let element">
+      <div class="action-icon-container">
+        <mat-icon (click)="updateActivity(element)" class="action-icon" matTooltip="Tevékenység módosítás">edit</mat-icon>
+        <mat-icon (click)="deleteActivity(element)" class="action-icon" matTooltip="Tevékenység törlés">delete</mat-icon>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="4">Nincs találat a szűrésre "{{input.value}}"</td>
+  </tr>
+</table>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 20]"
+               showFirstLastButtons
+               aria-label="Select page of periodic elements">
+</mat-paginator>

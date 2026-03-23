@@ -37,6 +37,11 @@ import { MatSelect } from '@angular/material/select';
 import {ReactiveFormsModule, FormBuilder, Validators, FormsModule} from '@angular/forms';
 import { PartnerStatus } from '../enums/PartnerStatus';
 import { PartnerRequestDto } from './dto/PartnerRequestDto';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MatSort} from '@angular/material/sort';
+import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-partner',
@@ -63,13 +68,17 @@ import { PartnerRequestDto } from './dto/PartnerRequestDto';
     MatSelect,
     ReactiveFormsModule,
     MatOption,
-    FormsModule
+    FormsModule,
+    MatIcon,
+    MatTooltip,
+    MatSort
   ],
   templateUrl: './partner.html',
   styleUrl: './partner.scss',
 })
 export class Partner implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   @ViewChild('partnerActions', { static: true })
   partnerActions!: TemplateRef<unknown>;
@@ -80,11 +89,13 @@ export class Partner implements OnInit, AfterViewInit, OnDestroy {
   private readonly dialog = inject(MatDialog);
   private readonly fb = inject(FormBuilder);
 
-  displayedColumns: string[] = ['id', 'name', 'taxNumber', 'headquarters', 'status', 'qualifications'];
+  displayedColumns: string[] = ['id', 'name', 'taxNumber', 'headquarters', 'status', 'qualifications', "actions"];
   dataSource = new MatTableDataSource<PartnerResponseDto>([]);
 
   isLoading = false;
   isSaving = false;
+  isEdit: boolean = false;
+  editingPartnerId: number | null = null;
 
   readonly qualificationOptions = Object.values(QualificationType);
   readonly partnerStatusOptions = Object.values(PartnerStatus);
@@ -102,6 +113,7 @@ export class Partner implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly sidenav: Sidenav,
     private readonly partnerService: PartnerService,
+    private readonly router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -111,6 +123,12 @@ export class Partner implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+
+    this.dataSource.sort = this.sort;
+
+    this.sort.active = 'id';
+    this.sort.direction = 'asc';
+    this.sort.sortChange.emit();
   }
 
   ngOnDestroy(): void {
@@ -180,17 +198,71 @@ export class Partner implements OnInit, AfterViewInit, OnDestroy {
       qualifications: this.partnerForm.controls.qualifications.getRawValue()
     };
 
-    this.partnerService.create(request).subscribe({
-      next: () => {
+    const request$ = this.isEdit && this.editingPartnerId != null
+      ? this.partnerService.update(this.editingPartnerId, request)
+      : this.partnerService.create(request);
+
+    request$.subscribe({
+      next: (result) => {
+        console.log(result);
+        this.isEdit = false;
+        this.editingPartnerId = null;
         this.isSaving = false;
         dialogRef.close();
         this.loadPartners();
       },
       error: (error) => {
+        this.isEdit = false;
+        this.editingPartnerId = null;
         console.error(error);
         this.isSaving = false;
       }
     });
+  }
+
+  updatePartner(partner: PartnerResponseDto): void {
+
+    this.isEdit = true;
+    this.editingPartnerId = partner.id;
+
+    this.partnerForm.reset({
+      name: partner.name,
+      taxNumber: partner.taxNumber,
+      headquarters: partner.headquarters,
+      status: partner.status,
+      qualifications: partner.qualifications ?? []
+    });
+
+    this.dialog.open(this.createPartnerDialog, {
+      disableClose: true,
+      width: '560px'
+    });
+  }
+
+  deletePartner(partner: PartnerResponseDto): void {
+    const dialogRef = this.dialog.open(ConfirmDialog, {
+      width: '400px',
+      data: {
+        title: 'Partner törlése',
+        message: `Biztosan törölni szeretnéd ezt a partnert?`,
+        partnerName: partner.name
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) return;
+      this.partnerService.delete(partner.id).subscribe({
+        next: () => {
+          this.loadPartners();
+        },
+        error: error => {
+          console.error(error);
+        }
+      });
+    });
+  }
+
+  goToDetails(partnerId: number) {
+    this.router.navigate(['/partners', partnerId]).then();
   }
 
   get nameCtrl() {
@@ -208,4 +280,6 @@ export class Partner implements OnInit, AfterViewInit, OnDestroy {
   get statusCtrl() {
     return this.partnerForm.controls.status;
   }
+
+  protected readonly PartnerStatus = PartnerStatus;
 }

@@ -6,7 +6,7 @@ import {
   MatSidenavContent
 } from '@angular/material/sidenav';
 import { NgTemplateOutlet } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import {RouterLink, RouterOutlet} from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
@@ -18,7 +18,8 @@ import { MatIcon } from '@angular/material/icon';
     MatSidenavContent,
     RouterOutlet,
     NgTemplateOutlet,
-    MatIcon
+    MatIcon,
+    RouterLink
   ],
   templateUrl: './sidenav.html',
   styleUrl: './sidenav.scss',

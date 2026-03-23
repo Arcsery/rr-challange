@@ -41,11 +41,6 @@ public class PartnerServiceImpl implements PartnerService {
     public void delete(Long id) {
         Partner partner = partnerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Partner not found with id: " + id));
-
-        if (activityRepository.existsByPartnerId(id)) {
-            throw new BusinessException("Partner cannot be deleted because it has related activities");
-        }
-
         partnerRepository.delete(partner);
     }
 

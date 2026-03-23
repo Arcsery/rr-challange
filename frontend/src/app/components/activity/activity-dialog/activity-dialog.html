@@ -1,0 +1,80 @@
+<h2 mat-dialog-title>
+  {{ isEdit ? 'Tevékenység módosítása' : 'Tevékenység hozzáadása' }}
+</h2>
+
+<form [formGroup]="activityForm" (ngSubmit)="save()">
+  <mat-dialog-content class="dialog-content">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tárgy</mat-label>
+      <input matInput formControlName="subject" />
+
+      @if (subjectCtrl.hasError('required') && subjectCtrl.touched) {
+        <mat-error>A tárgy kötelező.</mat-error>
+      }
+
+      @if (subjectCtrl.hasError('maxlength') && subjectCtrl.touched) {
+        <mat-error>Maximum 150 karakter lehet.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Típus</mat-label>
+      <input matInput formControlName="type" />
+
+      @if (typeCtrl.hasError('required') && typeCtrl.touched) {
+        <mat-error>A típus kötelező.</mat-error>
+      }
+
+      @if (typeCtrl.hasError('maxlength') && typeCtrl.touched) {
+        <mat-error>Maximum 100 karakter lehet.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Leírás</mat-label>
+      <textarea matInput rows="4" formControlName="description"></textarea>
+
+      @if (descriptionCtrl.hasError('maxlength') && descriptionCtrl.touched) {
+        <mat-error>Maximum 1000 karakter lehet.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Időtartam (perc)</mat-label>
+      <input matInput type="number" min="1" formControlName="durationMinutes" />
+
+      @if (durationMinutesCtrl.hasError('required') && durationMinutesCtrl.touched) {
+        <mat-error>Az időtartam kötelező.</mat-error>
+      }
+
+      @if (durationMinutesCtrl.hasError('min') && durationMinutesCtrl.touched) {
+        <mat-error>Az időtartam legalább 1 perc kell legyen.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Felelős neve</mat-label>
+      <input matInput formControlName="responsibleName" />
+
+      @if (responsibleNameCtrl.hasError('required') && responsibleNameCtrl.touched) {
+        <mat-error>A felelős neve kötelező.</mat-error>
+      }
+
+      @if (responsibleNameCtrl.hasError('maxlength') && responsibleNameCtrl.touched) {
+        <mat-error>Maximum 150 karakter lehet.</mat-error>
+      }
+    </mat-form-field>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button type="button" mat-button mat-dialog-close [disabled]="isSaving">
+      Mégse
+    </button>
+
+    <button type="submit" mat-flat-button [disabled]="activityForm.invalid || isSaving">
+      {{ isSaving ? 'Mentés...' : 'Mentés' }}
+    </button>
+  </mat-dialog-actions>
+</form>

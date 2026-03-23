@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+
+<mat-dialog-content>
+  {{ data.message }}
+  <br/>
+  {{ data.partnerName }}
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>
+    Mégse
+  </button>
+  <button mat-flat-button color="warn" (click)="confirm()">
+    Törlés
+  </button>
+</mat-dialog-actions>

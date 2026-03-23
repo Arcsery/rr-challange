@@ -4,8 +4,7 @@
       <div class="action-title-container">
         <h2 class="action-title">Műveletek</h2>
       </div>
-      <button class="action-button" matButton="elevated"> Partner lista nézet</button>
-      <button class="action-button" matButton="elevated"> Tevékenység lista nézet</button>
+      <button routerLink="/partners" class="action-button" matButton="elevated"> Partner lista nézet</button>
       @if (contextualActions) {
           <ng-container *ngTemplateOutlet="contextualActions"></ng-container>
       }

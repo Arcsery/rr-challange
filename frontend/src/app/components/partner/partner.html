@@ -2,10 +2,13 @@
   <div class="extra-action-title-container">
     <span class="extra-action-title">Partner műveletek</span>
   </div>
-  <button class="action-button" matButton="filled" (click)="openDialog()" >Partner létrehozása</button>
+  <button class="action-button" matButton="filled" (click)="openDialog()" >
+    Partner létrehozása
+    <mat-icon iconPositionEnd>add</mat-icon>
+  </button>
   <div class="partner-toolbar">
     <mat-form-field appearance="outline">
-      <mat-label>Qualification szűrő</mat-label>
+      <mat-label>Minősítések szűrő</mat-label>
       <mat-select
         multiple
         [(ngModel)]="selectedQualifications"
@@ -24,11 +27,11 @@
 </ng-template>
 
 <mat-form-field>
-  <mat-label>Filter</mat-label>
+  <mat-label>Szűrés</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
 </mat-form-field>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8">
 
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef>ID</th>
@@ -62,6 +65,17 @@
     </td>
   </ng-container>
 
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Múveletek</th>
+    <td mat-cell *matCellDef="let element">
+      <div class="action-icon-container">
+        <mat-icon (click)="goToDetails(element.id)" class="action-icon" matTooltip="Részletes nézet" >assignment_ind</mat-icon>
+        <mat-icon (click)="updatePartner(element)" class="action-icon" matTooltip="Partner módosítás">edit</mat-icon>
+        <mat-icon (click)="deletePartner(element)" class="action-icon" matTooltip="Partner törlés">delete</mat-icon>
+      </div>
+    </td>
+  </ng-container>
+
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
@@ -78,7 +92,9 @@
 </mat-paginator>
 
 <ng-template #createPartnerDialog let-dialogRef="dialogRef">
-  <h2 mat-dialog-title>Partner létrehozása</h2>
+  <h2 mat-dialog-title>
+    {{ isEdit ? 'Partner módosítása' : 'Partner létrehozása' }}
+  </h2>
 
   <form [formGroup]="partnerForm" (ngSubmit)="savePartner(dialogRef)">
     <mat-dialog-content class="dialog-content">
@@ -141,7 +157,7 @@
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
-      <button type="button" mat-button mat-dialog-close [disabled]="isSaving">
+      <button (click)="isEdit = false" type="button" mat-button mat-dialog-close [disabled]="isSaving">
         Mégse
       </button>
 

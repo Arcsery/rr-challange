@@ -4,6 +4,7 @@ import {QualificationType} from '../enums/QualificationType';
 import {Observable} from 'rxjs';
 import {PartnerResponseDto} from './dto/PartnerResponseDto';
 import {PartnerRequestDto} from './dto/PartnerRequestDto';
+import {PartnerDetailDto} from './dto/PartnerDetailDto';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,24 @@ export class PartnerService {
     return this.http.get<PartnerResponseDto[]>(this.baseUrl, { params });
   }
 
+  getDetailsById(partnerId: number): Observable<PartnerDetailDto> {
+    return this.http.get<PartnerDetailDto>(`${this.baseUrl}/${partnerId}`);
+  }
+
   create(request: PartnerRequestDto): Observable<PartnerResponseDto> {
     return this.http.post<PartnerResponseDto>(this.baseUrl, request);
+  }
+
+  update(id: number, request: PartnerRequestDto): Observable<PartnerResponseDto> {
+    return this.http.put<PartnerResponseDto>(
+      `${this.baseUrl}/${id}`,
+      request
+    );
+  }
+
+  delete(id: number) {
+    return this.http.delete(
+      `${this.baseUrl}/${id}`
+    );
   }
 }
