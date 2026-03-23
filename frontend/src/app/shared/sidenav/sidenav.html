@@ -1,0 +1,27 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav class="sidenav-bar" #sidenav mode="side" opened>
+    <div class="action-container">
+      <div class="action-title-container">
+        <h2 class="action-title">Műveletek</h2>
+      </div>
+      <button class="action-button" matButton="elevated"> Partner lista nézet</button>
+      <button class="action-button" matButton="elevated"> Tevékenység lista nézet</button>
+      @if (contextualActions) {
+          <ng-container *ngTemplateOutlet="contextualActions"></ng-container>
+      }
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <button
+      matButton="filled"
+      class="sidebar-toggle"
+      (click)="sidenav.toggle()">
+      <mat-icon>
+        {{ sidenav.opened ? 'chevron_left' : 'chevron_right' }}
+      </mat-icon>
+    </button>
+    <div class="sidenav-content">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

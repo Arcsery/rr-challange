@@ -19,5 +19,5 @@ public interface PartnerService {
 
     PartnerDetailDto getDetailById(Long id);
 
-    List<PartnerResponseDto> getAll(QualificationType qualification);
+    List<PartnerResponseDto> getAll(List<QualificationType> qualifications);
 }

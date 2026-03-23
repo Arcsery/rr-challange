@@ -39,9 +39,10 @@ public class PartnerController {
 
     @GetMapping
     public ResponseEntity<List<PartnerResponseDto>> getAll(
-            @RequestParam(required = false) QualificationType qualification
+            @RequestParam(name = "qualification", required = false)
+            List<QualificationType> qualifications
     ) {
-        return ResponseEntity.ok(partnerService.getAll(qualification));
+        return ResponseEntity.ok(partnerService.getAll(qualifications));
     }
 
     @GetMapping("/{id}")

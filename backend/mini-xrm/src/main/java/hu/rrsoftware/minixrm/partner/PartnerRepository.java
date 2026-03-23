@@ -10,10 +10,15 @@ import java.util.List;
 @Repository
 public interface PartnerRepository extends JpaRepository<Partner, Long> {
     @Query("""
-            select distinct p
-            from Partner p
-            join p.qualifications q
-            where q = :qualification
-            """)
-    List<Partner> findByQualification(QualificationType qualification);
+        select p
+        from Partner p
+        join p.qualifications q
+        where q in :qualifications
+        group by p
+        having count(distinct q) = :qualificationCount
+        """)
+    List<Partner> findByAllQualifications(
+            List<QualificationType> qualifications,
+            long qualificationCount
+    );
 }

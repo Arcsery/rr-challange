@@ -15,13 +15,13 @@ import java.util.Set;
 @AllArgsConstructor
 public class PartnerRequestDto {
 
-    @NotBlank
+    @NotBlank(message = "A partner neve kötelező")
     private String name;
-    @NotBlank
+    @NotBlank(message = "Az adószám kötelező")
     private String taxNumber;
-    @NotBlank
+    @NotBlank(message = "A székhely kötelező")
     private String headquarters;
-    @NotNull
+    @NotNull(message = "A státusz kötelező")
     private PartnerStatus status;
     private Set<QualificationType> qualifications = new HashSet<>();
 }

@@ -83,10 +83,11 @@ public class PartnerServiceImpl implements PartnerService {
     }
 
     @Override
-    public List<PartnerResponseDto> getAll(QualificationType qualification) {
-        List<Partner> partners = qualification == null
-                ? partnerRepository.findAll()
-                : partnerRepository.findByQualification(qualification);
+    public List<PartnerResponseDto> getAll(List<QualificationType> qualifications) {
+        List<Partner> partners =
+                (qualifications == null || qualifications.isEmpty())
+                        ? partnerRepository.findAll()
+                        : partnerRepository.findByAllQualifications(qualifications, (long) qualifications.size());
 
         return partners.stream()
                 .map(this::mapToResponse)

@@ -1,5 +1,6 @@
 package hu.rrsoftware.minixrm.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -56,6 +57,35 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        String message = "Adatbázis integritási hiba történt";
+
+        Throwable root = ex.getMostSpecificCause();
+        String rootMessage = root.getMessage();
+
+        Map<String, String> details = new LinkedHashMap<>();
+
+        if (rootMessage != null) {
+            if (rootMessage.contains("tax_number")) {
+                message = "Az adószám már létezik";
+                details.put("taxNumber", "Ez az adószám már szerepel a rendszerben");
+            } else {
+                details.put("database", rootMessage);
+            }
+        }
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                HttpStatus.CONFLICT.getReasonPhrase(),
+                message,
+                details.isEmpty() ? null : details
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)
