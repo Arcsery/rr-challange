@@ -156,6 +156,24 @@ Segítségével elkerülhető:
 - konstruktorok generálása
 - builder pattern kézi implementálása
 
+### 4. Maven használata build eszközként  
+  
+A projekt build eszközeként Maven került kiválasztásra.  
+  
+Előnyei:  
+  
+- széles körben használt a Spring Boot ökoszisztémában  
+- stabil és jól dokumentált dependency kezelés  
+- konzisztens projektstruktúra  
+- könnyű integráció Docker környezetben  
+- egyszerű futtatás külön konfiguráció nélkül  
+  
+A Maven használata különösen előnyös Spring Boot projektek esetében,  
+mivel a legtöbb hivatalos dokumentáció és minta projekt is erre épül.  
+  
+A Gradle szintén megfelelő alternatíva lehet, azonban jelen projekt esetében  
+a Maven egyszerűbb és gyorsabban konfigurálható megoldást biztosított.
+
 ---
 
 ## Kompromisszumok időhiány miatt
