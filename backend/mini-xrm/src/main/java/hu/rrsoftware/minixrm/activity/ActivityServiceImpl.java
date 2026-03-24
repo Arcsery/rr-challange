@@ -25,6 +25,11 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Transactional
     public ActivityResponseDto create(ActivityRequestDto dto) {
+
+        if (dto.getDurationMinutes() == null || dto.getDurationMinutes() <= 0) {
+            throw new BusinessException("Duration must be greater than 0");
+        }
+
         Partner partner = partnerRepository.findById(dto.getPartnerId())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Partner not found with id: " + dto.getPartnerId()
