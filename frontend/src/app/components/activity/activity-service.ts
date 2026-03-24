@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ActivityResponseDto} from './dto/ActivityResponseDto';
 import {ActivityRequestDto} from './dto/ActivityRequestDto';
+import {ActivityResponsibleReportDto} from './dto/ActivityResponsibleReportDto';
 
 @Injectable({
   providedIn: 'root',
@@ -21,5 +22,9 @@ export class ActivityService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  getResponsibleActivityReport(): Observable<ActivityResponsibleReportDto[]> {
+    return this.http.get<ActivityResponsibleReportDto[]>(`${this.baseUrl}/responsible-report`);
   }
 }

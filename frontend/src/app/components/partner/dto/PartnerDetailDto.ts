@@ -1,6 +1,6 @@
-import {PartnerRequestDto} from './PartnerRequestDto';
 import {ActivityResponseDto} from '../../activity/dto/ActivityResponseDto';
+import {PartnerResponseDto} from './PartnerResponseDto';
 
-export interface PartnerDetailDto extends PartnerRequestDto {
+export interface PartnerDetailDto extends PartnerResponseDto {
   activities: ActivityResponseDto[];
 }

@@ -2,6 +2,7 @@ package hu.rrsoftware.minixrm.activity;
 
 import hu.rrsoftware.minixrm.activity.dto.ActivityRequestDto;
 import hu.rrsoftware.minixrm.activity.dto.ActivityResponseDto;
+import hu.rrsoftware.minixrm.activity.dto.ActivityResponsibleReportDto;
 import hu.rrsoftware.minixrm.enums.PartnerStatus;
 import hu.rrsoftware.minixrm.exception.BusinessException;
 import hu.rrsoftware.minixrm.exception.ResourceNotFoundException;
@@ -9,6 +10,7 @@ import hu.rrsoftware.minixrm.partner.Partner;
 import hu.rrsoftware.minixrm.partner.PartnerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class ActivityServiceImpl implements ActivityService {
 
 
     @Override
+    @Transactional
     public ActivityResponseDto create(ActivityRequestDto dto) {
         Partner partner = partnerRepository.findById(dto.getPartnerId())
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -38,6 +41,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    @Transactional
     public ActivityResponseDto update(Long id, ActivityRequestDto dto) {
         Activity activity = activityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -59,6 +63,12 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    public List<ActivityResponsibleReportDto> getResponsibleActivityReport() {
+        return activityRepository.getResponsibleActivityReport();
+    }
+
+    @Override
+    @Transactional
     public void delete(Long id) {
         Activity activity = activityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(

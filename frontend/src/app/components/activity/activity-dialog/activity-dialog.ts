@@ -11,7 +11,6 @@ import {
 import {ActivityResponseDto} from '../dto/ActivityResponseDto';
 import {ActivityRequestDto} from '../dto/ActivityRequestDto';
 import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {MatSelect} from '@angular/material/select';
 import {MatButton} from '@angular/material/button';
 
 interface ActivityDialogData {
@@ -28,7 +27,6 @@ interface ActivityDialogData {
     MatLabel,
     MatInput,
     MatError,
-    MatSelect,
     MatDialogActions,
     MatButton,
     MatDialogClose,

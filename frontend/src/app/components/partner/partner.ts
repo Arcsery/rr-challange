@@ -92,7 +92,6 @@ export class Partner implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['id', 'name', 'taxNumber', 'headquarters', 'status', 'qualifications', "actions"];
   dataSource = new MatTableDataSource<PartnerResponseDto>([]);
 
-  isLoading = false;
   isSaving = false;
   isEdit: boolean = false;
   editingPartnerId: number | null = null;
@@ -136,7 +135,6 @@ export class Partner implements OnInit, AfterViewInit, OnDestroy {
   }
 
   loadPartners(): void {
-    this.isLoading = true;
 
     const qualificationsToSend =
       this.selectedQualifications.length > 0 ? this.selectedQualifications : undefined;
@@ -144,11 +142,9 @@ export class Partner implements OnInit, AfterViewInit, OnDestroy {
     this.partnerService.getAll(qualificationsToSend).subscribe({
       next: (partners) => {
         this.dataSource.data = partners;
-        this.isLoading = false;
       },
       error: (error) => {
         console.error(error);
-        this.isLoading = false;
       }
     });
   }

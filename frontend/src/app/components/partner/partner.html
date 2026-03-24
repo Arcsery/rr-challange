@@ -1,12 +1,12 @@
 <ng-template #partnerActions>
-  <div class="extra-action-title-container">
-    <span class="extra-action-title">Partner műveletek</span>
+  <div class="extra-partner-title-container">
+    <span class="extra-partner-title">Partner műveletek</span>
   </div>
   <button class="action-button" matButton="filled" (click)="openDialog()" >
     Partner létrehozása
     <mat-icon iconPositionEnd>add</mat-icon>
   </button>
-  <div class="partner-toolbar">
+  <div class="select-container">
     <mat-form-field appearance="outline">
       <mat-label>Minősítések szűrő</mat-label>
       <mat-select
@@ -26,9 +26,10 @@
   </div>
 </ng-template>
 
+<h3>Partner lista</h3>
 <mat-form-field>
   <mat-label>Szűrés</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+  <input matInput (keyup)="applyFilter($event)" #input>
 </mat-form-field>
 
 <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8">
@@ -87,8 +88,7 @@
 </table>
 
 <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-               showFirstLastButtons
-               aria-label="Select page of periodic elements">
+               showFirstLastButtons>
 </mat-paginator>
 
 <ng-template #createPartnerDialog let-dialogRef="dialogRef">

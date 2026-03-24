@@ -11,6 +11,7 @@ import hu.rrsoftware.minixrm.partner.dto.PartnerRequestDto;
 import hu.rrsoftware.minixrm.partner.dto.PartnerResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class PartnerServiceImpl implements PartnerService {
     private final ActivityRepository activityRepository;
 
     @Override
+    @Transactional
     public PartnerResponseDto create(PartnerRequestDto dto) {
         Partner partner = new Partner();
         mapToEntity(dto, partner);
@@ -29,6 +31,7 @@ public class PartnerServiceImpl implements PartnerService {
     }
 
     @Override
+    @Transactional
     public PartnerResponseDto update(Long id, PartnerRequestDto dto) {
         Partner partner = partnerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Partner not found with id: " + id));
@@ -38,6 +41,7 @@ public class PartnerServiceImpl implements PartnerService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         Partner partner = partnerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Partner not found with id: " + id));
