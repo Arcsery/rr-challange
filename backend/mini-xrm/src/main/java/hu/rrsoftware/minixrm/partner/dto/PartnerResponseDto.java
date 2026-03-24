@@ -12,6 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class PartnerResponseDto {
     private Long id;
+    private Long version;
     private String name;
     private String taxNumber;
     private String headquarters;

@@ -32,6 +32,7 @@ import {PartnerStatus} from '../../enums/PartnerStatus';
 import {MatTooltip} from '@angular/material/tooltip';
 import {ActivityDialog} from '../../activity/activity-dialog/activity-dialog';
 import {ActivityService} from '../../activity/activity-service';
+import {SnackbarMessageService} from '../../../shared/snackbar-message/snackbar-message-service';
 
 @Component({
   selector: 'app-partner-detail',
@@ -76,6 +77,7 @@ export class PartnerDetail implements OnInit, AfterViewInit, OnDestroy {
   private readonly sidenav = inject(Sidenav);
   private readonly partnerService = inject(PartnerService);
   private readonly activityService = inject(ActivityService);
+  private readonly snackbarService = inject(SnackbarMessageService);
 
   partnerId!: number;
   partner: PartnerDetailDto | null = null;
@@ -106,6 +108,7 @@ export class PartnerDetail implements OnInit, AfterViewInit, OnDestroy {
       },
       error: (error) => {
         console.error(error);
+        this.snackbarService.showError(error.message);
       }
     });
   }

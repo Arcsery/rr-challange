@@ -5,6 +5,7 @@ import hu.rrsoftware.minixrm.activity.ActivityRepository;
 import hu.rrsoftware.minixrm.activity.dto.ActivityResponseDto;
 import hu.rrsoftware.minixrm.enums.QualificationType;
 import hu.rrsoftware.minixrm.exception.BusinessException;
+import hu.rrsoftware.minixrm.exception.ConflictException;
 import hu.rrsoftware.minixrm.exception.ResourceNotFoundException;
 import hu.rrsoftware.minixrm.partner.dto.PartnerDetailDto;
 import hu.rrsoftware.minixrm.partner.dto.PartnerRequestDto;
@@ -30,11 +31,14 @@ public class PartnerServiceImpl implements PartnerService {
         return mapToResponse(partnerRepository.save(partner));
     }
 
-    @Override
     @Transactional
     public PartnerResponseDto update(Long id, PartnerRequestDto dto) {
         Partner partner = partnerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Partner not found with id: " + id));
+
+        if (!partner.getVersion().equals(dto.getVersion())) {
+            throw new ConflictException("Partner was modified by another user");
+        }
 
         mapToEntity(dto, partner);
         return mapToResponse(partnerRepository.save(partner));
@@ -70,7 +74,9 @@ public class PartnerServiceImpl implements PartnerService {
 
         PartnerDetailDto dto = new PartnerDetailDto();
 
+
         dto.setId(partner.getId());
+        dto.setVersion(partner.getVersion());
         dto.setName(partner.getName());
         dto.setTaxNumber(partner.getTaxNumber());
         dto.setHeadquarters(partner.getHeadquarters());
@@ -104,6 +110,7 @@ public class PartnerServiceImpl implements PartnerService {
     private PartnerResponseDto mapToResponse(Partner partner) {
         PartnerResponseDto dto = new PartnerResponseDto();
         dto.setId(partner.getId());
+        dto.setVersion(partner.getVersion());
         dto.setName(partner.getName());
         dto.setTaxNumber(partner.getTaxNumber());
         dto.setHeadquarters(partner.getHeadquarters());

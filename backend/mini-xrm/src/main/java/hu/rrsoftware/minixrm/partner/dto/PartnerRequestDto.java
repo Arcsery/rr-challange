@@ -15,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class PartnerRequestDto {
 
+    private Long version;
     @NotBlank(message = "A partner neve kötelező")
     private String name;
     @NotBlank(message = "Az adószám kötelező")

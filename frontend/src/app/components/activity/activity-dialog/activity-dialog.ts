@@ -12,6 +12,7 @@ import {ActivityResponseDto} from '../dto/ActivityResponseDto';
 import {ActivityRequestDto} from '../dto/ActivityRequestDto';
 import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
+import {SnackbarMessageService} from '../../../shared/snackbar-message/snackbar-message-service';
 
 interface ActivityDialogData {
   partnerId: number;
@@ -39,6 +40,7 @@ export class ActivityDialog {
   private readonly fb = inject(FormBuilder);
   private readonly activityService = inject(ActivityService);
   private readonly dialogRef = inject(MatDialogRef<ActivityDialog>);
+  private readonly snackbarService = inject(SnackbarMessageService);
   readonly data = inject<ActivityDialogData>(MAT_DIALOG_DATA);
 
   isSaving = false;
@@ -87,12 +89,17 @@ export class ActivityDialog {
 
     request$.subscribe({
       next: (response) => {
+        const message = this.isEdit ? "Sikeres Tevékenység módosítás" : "Sikeres Tevékenység hozzáadás"
+        this.snackbarService.showSuccess(message);
         this.isSaving = false;
+        this.isEdit = false;
         this.dialogRef.close(response);
       },
       error: (error) => {
         console.error(error);
+        this.snackbarService.showError(error.message);
         this.isSaving = false;
+        this.isEdit = false;
       }
     });
   }

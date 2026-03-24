@@ -1,0 +1,12 @@
+<div class="snackbar-wrapper">
+  <div class="text">
+    {{ data.message }}
+    <br />
+    Kérlek frissítsd az adatokat!
+  </div>
+
+  <div class="actions">
+    <button mat-button (click)="reload()">Frissítés</button>
+    <button mat-button (click)="close()">Bezárás</button>
+  </div>
+</div>

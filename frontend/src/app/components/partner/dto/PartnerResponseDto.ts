@@ -3,6 +3,7 @@ import {QualificationType} from '../../enums/QualificationType';
 
 export interface PartnerResponseDto {
   id: number;
+  version: number;
   name: string;
   taxNumber: string;
   headquarters: string;
